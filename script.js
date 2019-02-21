@@ -13,7 +13,7 @@ class Park extends Element {
   }
 
   treeDensity() {
-    const density = this.numTrees / this.area;
+    const density = Math.round(this.numTrees / this.area);
     console.log(
       `${this.name} has a tree density of ${density} trees per sq/km`
     );
@@ -54,11 +54,46 @@ const allStreets = [
   new Street('Electric Avenue', 2012, 2.3, 5)
 ];
 
-function reportParks(park) {
-  console.log('<=== Park Report ===>');
+function calc(array) {
+  const sum = array.reduce((prev, current, index) => prev + current, 0);
+  return [sum, sum / array.length];
 }
 
-function reportStreets(street) {}
+function reportParks(park) {
+  console.log('<=== Park Report ===>');
+  park.forEach(element => element.treeDensity());
+  const ages = park.map(element => 2019 - element.buildYear);
+  const [totalAge, averageAge] = calc(ages);
+  console.log(
+    `Our ${park.length} parks have an average of ${Math.round(
+      averageAge
+    )} years of age`
+  );
+
+  // Park with the most trees
+  const parkIndex = park
+    .map(element => element.numTrees)
+    .findIndex(element => element >= 1000);
+  console.log(
+    `${park[parkIndex].name} has the most trees, estimated at around: ${
+      park[parkIndex].numTrees
+    }`
+  );
+}
+
+function reportStreets(street) {
+  // Total and Average Length
+  const [totalLength, averageLength] = calc(
+    street.map(element => element.length)
+  );
+  console.log(
+    `Our ${street.length} streets have a total of ${Math.trunc(
+      totalLength
+    )} km, with the average length of ${Math.trunc(averageLength)}`
+  );
+  // Classify sizes
+  street.forEach(element => element.classifyStreet());
+}
 
 reportParks(allParks);
 reportStreets(allStreets);
